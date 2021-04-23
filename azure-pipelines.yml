@@ -87,7 +87,7 @@ stages:
 
       - task: DotNetCoreCLI@2
         displayName: 'dotnet pack $(buildConfiguration)'
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
         inputs:
           command: custom
           projects: '**/*.csproj'
@@ -96,7 +96,7 @@ stages:
 
       - task: PublishBuildArtifacts@1
         displayName: Publish Build Artifacts for CI Build
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
           ArtifactName: $(artifactName)
