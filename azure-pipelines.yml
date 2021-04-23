@@ -36,6 +36,8 @@ variables:
   value: $[counter(format('{0}.{1}', variables.majorVersion, variables.minorVersion), 0)]
 - name: packageVersion
   value: $(majorVersion).$(minorVersion).$(patch)-alpha
+- name: artifactName
+  value: AStarResult
 
 stages:
 - stage: Build
@@ -60,15 +62,6 @@ stages:
           command: 'build'
           projects: $(solutionFileToBuild)
           arguments: '--nologo -c $(buildConfiguration)'
-
-      - task: DotNetCoreCLI@2
-        displayName: dotnet publish
-        inputs:
-          command: 'publish'
-          projects: '$(projectsToBuild)'
-          publishWebProjects: false
-          arguments: '--nologo -c $(buildConfiguration) -o $(publishOutputDir)'
-          zipAfterPublish: false
 
       - task: DotNetCoreCLI@2
         displayName: Run Unit Tests
