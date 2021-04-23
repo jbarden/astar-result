@@ -93,22 +93,16 @@ stages:
       #    summaryFileLocation: '$(codeCoverageReportDir)/Cobertura.xml'
       #    reportDirectory: $(codeCoverageReportDir)
 
-      - task: NuGetCommand@2
-        inputs:
-          command: pack
-          packagesToPack: '**/A.Star.csproj'
-          versioningScheme: byEnvVar
-          versionEnvVar: $(majorVersion).$(minorVersion).$(patch)$(packageVersion)
-          packDestination: '$(Build.ArtifactStagingDirectory)\nugetpkg'
-
       - task: DotNetCoreCLI@2
         displayName: 'dotnet pack $(buildConfiguration)'
         condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
         inputs:
-          command: custom
-          projects: '**/*.csproj'
-          custom: pack
-          arguments: '/p:Configuration=$(buildConfiguration) --version:$(packageVersion) --no-build --include-symbols --output $(Build.ArtifactStagingDirectory)  --verbosity Detailed -p:SymbolPackageFormat=snupkg'
+          command: pack
+          nobuild: true
+          projects: '**/A.Star.csproj'
+          versioningScheme: byEnvVar
+          versionEnvVar: packageVersion
+          arguments: '/p:Configuration=$(buildConfiguration) --no-build --include-symbols --output $(Build.ArtifactStagingDirectory)  --verbosity Detailed -p:SymbolPackageFormat=snupkg'
 
       - task: PublishBuildArtifacts@1
         displayName: Publish Build Artifacts for CI Build
