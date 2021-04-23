@@ -35,7 +35,7 @@ variables:
 - name: patch
   value: counter(format('{0}.{1}', variables.majorVersion, variables.minorVersion), 0)
 - name: packageVersion
-  value: -alpha
+  value: $(majorVersion).$(minorVersion).$(patch)-alpha
 
 stages:
 - stage: Build
@@ -108,7 +108,7 @@ stages:
           command: custom
           projects: '**/*.csproj'
           custom: pack
-          arguments: '/p:Configuration=$(buildConfiguration) --version:0.0.$(Rev:.r)-alpha --no-build --include-symbols --output $(Build.ArtifactStagingDirectory)  --verbosity Detailed -p:SymbolPackageFormat=snupkg'
+          arguments: '/p:Configuration=$(buildConfiguration) --version:$(packageVersion) --no-build --include-symbols --output $(Build.ArtifactStagingDirectory)  --verbosity Detailed -p:SymbolPackageFormat=snupkg'
 
       - task: PublishBuildArtifacts@1
         displayName: Publish Build Artifacts for CI Build
