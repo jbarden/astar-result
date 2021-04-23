@@ -64,6 +64,15 @@ stages:
           arguments: '--nologo -c $(buildConfiguration)'
 
       - task: DotNetCoreCLI@2
+        displayName: dotnet publish
+        inputs:
+          command: 'publish'
+          projects: '$(projectsToBuild)'
+          publishWebProjects: false
+          arguments: '--nologo -c $(buildConfiguration) -o $(publishOutputDir)'
+          zipAfterPublish: false
+
+      - task: DotNetCoreCLI@2
         displayName: Run Unit Tests
         continueOnError: false
         inputs:
