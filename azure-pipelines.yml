@@ -28,6 +28,14 @@ variables:
   value: $(Build.ArtifactStagingDirectory)/CoverageReport
 - name: disable.coverage.autogenerate
   value: 'true' # see https://github.com/danielpalme/ReportGenerator/wiki/Integration#attention
+- name: majorVersion
+  value: 0
+- name: minorVersion
+  value: 0
+- name: patch
+  value: counter(format('{0}.{1}', variables.majorVersion, variables.minorVersion), 0)
+- name: packageVersion
+  value: -alpha
 
 stages:
 - stage: Build
@@ -84,6 +92,14 @@ stages:
       #    codeCoverageTool: 'Cobertura'
       #    summaryFileLocation: '$(codeCoverageReportDir)/Cobertura.xml'
       #    reportDirectory: $(codeCoverageReportDir)
+
+      - task: NuGetCommand@2
+        inputs:
+          command: pack
+          packagesToPack: '**/A.Star.csproj'
+          versioningScheme: byEnvVar
+          versionEnvVar: $(majorVersion).$(minorVersion).$(patch)$(packageVersion)
+          packDestination: '$(Build.ArtifactStagingDirectory)\nugetpkg'
 
       - task: DotNetCoreCLI@2
         displayName: 'dotnet pack $(buildConfiguration)'
