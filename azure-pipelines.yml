@@ -33,7 +33,7 @@ variables:
 - name: minorVersion
   value: 0
 - name: patch
-  value: [counter(format('{0}.{1}', variables.majorVersion, variables.minorVersion), 0)]
+  value: $[counter(format('{0}.{1}', variables.majorVersion, variables.minorVersion), 0)]
 - name: packageVersion
   value: $(majorVersion).$(minorVersion).$(patch)-alpha
 
