@@ -1,4 +1,5 @@
-name: $(releaseNumber).$(minorVersion)$(rev:.r)
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
 trigger:
   batch: true
 
@@ -71,18 +72,18 @@ stages:
           publishTestResults: true
 
       # The following requires the test project includes both coverlet.collector and coverlet.msbuild or the task will fail "No file created".
-      - task: reportgenerator@4
-        displayName: Generate Coverage Report
-        inputs:
-          reports: '$(Build.SourcesDirectory)/**/*.cobertura.xml'
-          targetdir: '$(codeCoverageReportDir)'
+      #- task: reportgenerator@4
+      #  displayName: Generate Coverage Report
+      #  inputs:
+      #    reports: '$(Build.SourcesDirectory)/**/*.cobertura.xml'
+      #    targetdir: '$(codeCoverageReportDir)'
 
-      - task: PublishCodeCoverageResults@1
-        displayName: Publish Code Coverage
-        inputs:
-          codeCoverageTool: 'Cobertura'
-          summaryFileLocation: '$(codeCoverageReportDir)/Cobertura.xml'
-          reportDirectory: $(codeCoverageReportDir)
+      #- task: PublishCodeCoverageResults@1
+      #  displayName: Publish Code Coverage
+      #  inputs:
+      #    codeCoverageTool: 'Cobertura'
+      #    summaryFileLocation: '$(codeCoverageReportDir)/Cobertura.xml'
+      #    reportDirectory: $(codeCoverageReportDir)
 
       - task: DotNetCoreCLI@2
         displayName: 'dotnet pack $(buildConfiguration)'
@@ -91,7 +92,7 @@ stages:
           command: custom
           projects: '**/*.csproj'
           custom: pack
-          arguments: '/p:Configuration=$(buildConfiguration) --version:0.0.$(releaseNumber)-alpha --no-build --include-symbols --output $(Build.ArtifactStagingDirectory)  --verbosity Detailed -p:SymbolPackageFormat=snupkg'
+          arguments: '/p:Configuration=$(buildConfiguration) --version:0.0.$(rev:.r)-alpha --no-build --include-symbols --output $(Build.ArtifactStagingDirectory)  --verbosity Detailed -p:SymbolPackageFormat=snupkg'
 
       - task: PublishBuildArtifacts@1
         displayName: Publish Build Artifacts for CI Build
