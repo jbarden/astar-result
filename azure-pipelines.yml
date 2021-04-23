@@ -130,6 +130,6 @@ stages:
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
               inputs:
                 command: 'push'
-                packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+                packagesToPush: '**/*.nupkg'
                 nuGetFeedType: 'internal'
                 publishVstsFeed: 'd676d2fa-241a-4c42-8d69-feb71499b5fd'
