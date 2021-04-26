@@ -110,7 +110,7 @@ stages:
         displayName: Publish Build Artifacts for CI Build
         condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
         inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
           ArtifactName: $(artifactName)
           publishLocation: 'Container'
             
