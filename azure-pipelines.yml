@@ -125,17 +125,16 @@ stages:
       runOnce:
         deploy:
           steps:
-            - task: PowerShell@2
+            - task: Bash@3
               inputs:
                 targetType: 'inline'
                 script: |
-                  # Write your PowerShell commands here.
+                  # Write your commands here
                   
-                  Write-Host "Hello World"
+                  echo 'Hello world'
                   
-                  echo ls
-                workingDirectory: '$(System.ArtifactsDirectory)'
-
+                  ls -d */
+                  echo ls -d */
             - task: DotNetCoreCLI@2
               displayName: 'dotnet push to internal feed'
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
