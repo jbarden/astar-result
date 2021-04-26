@@ -125,6 +125,17 @@ stages:
       runOnce:
         deploy:
           steps:
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: |
+                  # Write your commands here
+                  
+                  echo 'Hello world'
+                  
+                  ls
+                  echo ls
+                workingDirectory: $(System.ArtifactsDirectory)
             - task: DotNetCoreCLI@2
               displayName: 'dotnet push to internal feed'
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
@@ -133,4 +144,4 @@ stages:
                 packagesToPush: '**/*.nupkg'
                 nuGetFeedType: 'internal'
                 publishVstsFeed: 'd676d2fa-241a-4c42-8d69-feb71499b5fd'
-                workingDirectory: '$(System.ArtifactsDirectory)'
+                workingDirectory: $(System.ArtifactsDirectory)
