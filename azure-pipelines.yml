@@ -133,7 +133,7 @@ stages:
                   
                   Write-Host "Hello World"
                   
-                  ls
+                  echo ls
                 workingDirectory: '$(System.ArtifactsDirectory)'
 
             - task: DotNetCoreCLI@2
