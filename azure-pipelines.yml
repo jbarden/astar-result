@@ -117,6 +117,7 @@ stages:
 - stage: Publish_Internal_Nuget
   jobs:
   - deployment: Publish_Internal_Nuget
+    condition: in(stageDependencies.Build.Build.result, 'Succeeded', 'SucceededWithIssues')
     displayName: Publish to Internal NuGet Feed
     pool:
       vmImage: 'windows-latest'
@@ -140,14 +141,15 @@ stages:
                   
                   echo 'Hello world'
                   
-                  echo ls –d */
+                  ls –d */
                 workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
             - task: DotNetCoreCLI@2
               displayName: 'dotnet push to internal feed'
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
               inputs:
                 command: 'push'
-                packagesToPush: 'AStarResult/A.Star.Result*.nupkg'
+                packagesToPush: '**/*.nupkg'
                 nuGetFeedType: 'internal'
                 publishVstsFeed: 'd676d2fa-241a-4c42-8d69-feb71499b5fd'
                 workingDirectory: '$(Build.ArtifactStagingDirectory)'
