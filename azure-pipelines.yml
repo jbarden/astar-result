@@ -141,7 +141,7 @@ stages:
                   
                   echo 'Hello world'
                   
-                  ls –l
+                  ls –l */
                 workingDirectory: '$(Build.ArtifactStagingDirectory)'
 
             - task: DotNetCoreCLI@2
