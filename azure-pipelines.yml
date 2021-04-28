@@ -133,17 +133,6 @@ stages:
                 patterns: '**/*.nupkg'
                 path: '$(Build.ArtifactStagingDirectory)'
 
-            - task: Bash@3
-              inputs:
-                targetType: 'inline'
-                script: |
-                  # Write your commands here
-                  
-                  echo 'Hello world'
-                  
-                  ls –l */
-                workingDirectory: '$(Build.ArtifactStagingDirectory)'
-
             - task: DotNetCoreCLI@2
               displayName: 'dotnet push to internal feed'
               condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
