@@ -56,6 +56,14 @@ stages:
           # vstsFeed: $(internalPackageFeedId)
           verbosityRestore: 'Normal'
 
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'SonarCloud'
+          organization: 'jbarden'
+          scannerMode: 'MSBuild'
+          projectKey: 'jbarden_astar-result'
+          projectName: 'astar-result'
+
       - task: DotNetCoreCLI@2
         displayName: dotnet build
         inputs:
@@ -63,6 +71,12 @@ stages:
           projects: $(solutionFileToBuild)
           arguments: '--nologo -c $(buildConfiguration)'
 
+      - task: SonarCloudAnalyze@1
+
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
+          
       - task: DotNetCoreCLI@2
         displayName: dotnet publish
         inputs:
